@@ -4,8 +4,11 @@ Repositorio base para la prueba tecnica del proceso de postulacion a
 **Ingeniero Backend/Cloud Senior Node.js** (arquitecturas serverless en AWS, entorno fintech).
 
 > Este scaffold se preparo ANTES de descargar el enunciado real (pendiente de acceso via
-> OTP en el link de DocSend). La estructura y stack se definieron en base a lo solicitado
-> en la oferta de trabajo. Ver `docs/BUENAS_PRACTICAS.md` para el checklist a seguir.
+> OTP en el link de DocSend). Defini el stack, la arquitectura y los lineamientos de
+> seguridad/testing en base a lo solicitado en la oferta de trabajo, y use Claude Code
+> como acelerador para la implementacion del andamiaje (config de lint/test/CI, estructura
+> de carpetas, ejemplo de handler). Cada decision fue revisada y es explicable por mi.
+> Ver `docs/BUENAS_PRACTICAS.md` para el checklist a seguir.
 
 ## Stack
 
@@ -52,9 +55,12 @@ Commits siguiendo [Conventional Commits](https://www.conventionalcommits.org/) (
 
 ## Nota sobre uso de IA
 
-Este repositorio se desarrolla con apoyo de Claude Code, tal como sugiere la oferta.
-Todo el codigo generado con asistencia de IA es revisado y comprendido antes de
-commitear, en linea con lo solicitado ("comprension integra, sin vibe coding").
+Defini los lineamientos tecnicos (stack, arquitectura, seguridad, testing) en base a los
+requisitos de la oferta, y use Claude Code como acelerador para construir el andamiaje
+inicial. Reviso y comprendo cada linea antes de commitear, en linea con lo solicitado en
+el proceso ("comprension integra del codigo, sin vibe coding"): puedo explicar el porque
+de cada decision (eleccion de Serverless Framework, modelado de DynamoDB, permisos IAM,
+configuracion de lint/test/CI, etc.).
 
 ## Pendiente
 
