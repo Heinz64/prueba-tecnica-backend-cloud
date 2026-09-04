@@ -1,0 +1,13 @@
+node_modules/
+.serverless/
+.build/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.vscode/
+.idea/
+.aws-sam/
