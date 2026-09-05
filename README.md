@@ -64,6 +64,22 @@ real. `/health` funciona sin problema; crear/listar items falla con
 (desplegada en AWS) o DynamoDB Local (plugin `serverless-dynamodb`, requiere Java).
 El panel sirve igual para validar auth, CORS y el formato de las respuestas de error.
 
+## Coleccion de Postman (postman/collection.json)
+
+Alternativa a `client/index.html` para probar la API con Postman/Insomnia (compatibles
+con el formato Postman v2.1). Incluye health check y todos los metodos de items
+(crear, obtener por id, listar con paginacion) mas casos de error (401, 404, 400) y
+un caso que demuestra la idempotencia.
+
+1. Importa `postman/collection.json` en Postman.
+2. En las variables de la coleccion, define `token` (genera uno con
+   `npm run dev:token -- dev-user-1`). `baseUrl` ya viene con `http://localhost:3000`.
+3. Corre "Crear item" primero — guarda el id creado en la variable `itemId` para que
+   "Obtener item por id" y "Crear item (reintento idempotente)" lo usen automaticamente.
+
+Aplica la misma limitacion que el panel HTML: crear/listar requieren una tabla
+DynamoDB real detras (ver nota arriba).
+
 ## Estrategia de branching
 
 - `main`: version estable/entregable final.
