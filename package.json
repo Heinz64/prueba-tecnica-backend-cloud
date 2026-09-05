@@ -12,7 +12,8 @@
     "test:watch": "jest --watch",
     "sls:offline": "serverless offline",
     "sls:deploy": "serverless deploy",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev:token": "node scripts/generate-dev-token.js"
   },
   "keywords": [],
   "author": "Heinz Barrientos",

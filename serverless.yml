@@ -10,6 +10,10 @@ provider:
   memorySize: 256
   timeout: 10
   logRetentionInDays: 14
+  httpApi:
+    # Habilitado solo para poder probar desde client/index.html en local.
+    # En un ambiente real esto se acota a los origenes del frontend real, no "*".
+    cors: true
   environment:
     NODE_ENV: ${self:provider.stage}
     LOG_LEVEL: info

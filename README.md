@@ -45,6 +45,25 @@ npm test
 npm run sls:offline   # levanta API Gateway + Lambda local
 ```
 
+## Panel visual de prueba (client/index.html)
+
+Con el server local corriendo (`npm run sls:offline`), abre `client/index.html`
+directamente en el navegador (doble clic, o "Abrir con" tu navegador) para crear,
+listar y ver items de forma visual, sin usar curl/Postman.
+
+1. Genera un token de prueba (el secreto nunca se expone en el navegador):
+   `npm run dev:token -- dev-user-1`
+2. Pega el token en el campo "Bearer token" del panel.
+3. Crea y explora items desde ahi.
+
+Es una herramienta de desarrollo local, no forma parte de la entrega.
+
+**Nota:** `serverless-offline` emula Lambda + API Gateway, pero no una tabla DynamoDB
+real. `/health` funciona sin problema; crear/listar items falla con
+`Could not load credentials from any providers` hasta que haya una tabla real
+(desplegada en AWS) o DynamoDB Local (plugin `serverless-dynamodb`, requiere Java).
+El panel sirve igual para validar auth, CORS y el formato de las respuestas de error.
+
 ## Estrategia de branching
 
 - `main`: version estable/entregable final.
