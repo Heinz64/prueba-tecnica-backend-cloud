@@ -7,6 +7,10 @@ crediticio de un RUT.
 Ver `docs/REQUERIMIENTOS_HISTORIAS_USUARIO.md` para el alcance exacto (extraído
 del enunciado) y `ai_interactions.md` para la transparencia de uso de IA pedida.
 
+Para la documentación formal del proyecto en formato **Spec-Driven
+Development** (principios del proyecto, especificación del feature, plan
+técnico y desglose de tareas), ver [`specify/`](./specify/README.md).
+
 ## Estructura
 
 ```
@@ -14,6 +18,7 @@ backend/    API REST (Express + TypeScript)
 frontend/   SPA (React + TypeScript)
 e2e/        Pruebas end-to-end (Playwright) sobre backend + frontend reales
 docs/       Requerimientos, historias de usuario, buenas practicas
+specify/    Documentacion SDD: constitucion del proyecto, spec/plan/tasks del feature
 ```
 
 ## Requisitos
