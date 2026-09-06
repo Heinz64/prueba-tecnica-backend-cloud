@@ -10,6 +10,19 @@ test.describe('Login', () => {
     await expect(page.getByText(/usuario o contraseña incorrectos/i)).toBeVisible();
   });
 
+  test('el toggle de mostrar/ocultar contraseña cambia el tipo del input', async ({ page }) => {
+    await page.goto('/');
+    const passwordInput = page.getByLabel('Contraseña');
+    await passwordInput.fill('user123');
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+
+    await page.getByRole('button', { name: /mostrar contraseña/i }).click();
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+
+    await page.getByRole('button', { name: /ocultar contraseña/i }).click();
+    await expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
   test('un usuario (role=user) inicia sesion y su RUT queda fijo/bloqueado', async ({ page }) => {
     await page.goto('/');
     await page.getByLabel('Usuario').fill('jperez');

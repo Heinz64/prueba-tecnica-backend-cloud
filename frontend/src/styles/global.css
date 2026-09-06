@@ -392,3 +392,38 @@ body {
     gap: 4px;
   }
 }
+
+/* Toggle mostrar/ocultar password */
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 44px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.password-toggle:hover { color: var(--ink-soft); background: var(--surface); }
+.password-toggle:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.password-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}

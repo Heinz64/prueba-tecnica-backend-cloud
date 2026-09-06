@@ -12,6 +12,8 @@ export interface Translations {
     passwordLabel: string;
     submit: string;
     submitting: string;
+    showPassword: string;
+    hidePassword: string;
     errors: {
       invalidCredentials: string;
       generic: string;
@@ -54,6 +56,8 @@ const es: Translations = {
     passwordLabel: 'Contraseña',
     submit: 'Ingresar',
     submitting: 'Ingresando…',
+    showPassword: 'Mostrar contraseña',
+    hidePassword: 'Ocultar contraseña',
     errors: {
       invalidCredentials: 'Usuario o contraseña incorrectos.',
       generic: 'No se pudo iniciar sesión.',
@@ -96,6 +100,8 @@ const en: Translations = {
     passwordLabel: 'Password',
     submit: 'Log in',
     submitting: 'Logging in…',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
     errors: {
       invalidCredentials: 'Incorrect username or password.',
       generic: 'Could not log in.',
