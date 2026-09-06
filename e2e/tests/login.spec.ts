@@ -4,16 +4,16 @@ test.describe('Login', () => {
   test('credenciales invalidas muestran un mensaje de error', async ({ page }) => {
     await page.goto('/');
     await page.getByLabel('Usuario').fill('admin');
-    await page.getByLabel('Contrasena').fill('clave-incorrecta');
+    await page.getByLabel('Contraseña').fill('clave-incorrecta');
     await page.getByRole('button', { name: /ingresar/i }).click();
 
-    await expect(page.getByText(/usuario o contrasena incorrectos/i)).toBeVisible();
+    await expect(page.getByText(/usuario o contraseña incorrectos/i)).toBeVisible();
   });
 
   test('un usuario (role=user) inicia sesion y su RUT queda fijo/bloqueado', async ({ page }) => {
     await page.goto('/');
     await page.getByLabel('Usuario').fill('jperez');
-    await page.getByLabel('Contrasena').fill('user123');
+    await page.getByLabel('Contraseña').fill('user123');
     await page.getByRole('button', { name: /ingresar/i }).click();
 
     await expect(page.getByRole('heading', { name: /consulta de score/i })).toBeVisible();
