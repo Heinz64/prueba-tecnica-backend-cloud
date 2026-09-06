@@ -12,6 +12,8 @@ export interface Translations {
     passwordLabel: string;
     submit: string;
     submitting: string;
+    showPassword: string;
+    hidePassword: string;
     errors: {
       invalidCredentials: string;
       generic: string;
@@ -24,6 +26,7 @@ export interface Translations {
     subtitleAdmin: string;
     rutLabel: string;
     rutPlaceholder: string;
+    rutHint: string;
     submit: string;
     submitting: string;
     resultRutLabel: string;
@@ -53,6 +56,8 @@ const es: Translations = {
     passwordLabel: 'Contraseña',
     submit: 'Ingresar',
     submitting: 'Ingresando…',
+    showPassword: 'Mostrar contraseña',
+    hidePassword: 'Ocultar contraseña',
     errors: {
       invalidCredentials: 'Usuario o contraseña incorrectos.',
       generic: 'No se pudo iniciar sesión.',
@@ -65,6 +70,7 @@ const es: Translations = {
     subtitleAdmin: 'Como administrador puedes consultar el score de cualquier RUT.',
     rutLabel: 'RUT',
     rutPlaceholder: '12.345.678-5',
+    rutHint: 'Puedes escribirlo con o sin puntos y guion: se formatea automáticamente.',
     submit: 'Consultar',
     submitting: 'Consultando…',
     resultRutLabel: 'RUT consultado',
@@ -94,6 +100,8 @@ const en: Translations = {
     passwordLabel: 'Password',
     submit: 'Log in',
     submitting: 'Logging in…',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
     errors: {
       invalidCredentials: 'Incorrect username or password.',
       generic: 'Could not log in.',
@@ -106,6 +114,7 @@ const en: Translations = {
     subtitleAdmin: 'As an admin you can check the score of any RUT.',
     rutLabel: 'RUT',
     rutPlaceholder: '12.345.678-5',
+    rutHint: 'You can type it with or without dots and dash: it auto-formats.',
     submit: 'Look up',
     submitting: 'Looking up…',
     resultRutLabel: 'RUT queried',

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { fetchScore, ApiError } from '../api/client';
+import { formatRutInput } from '../lib/rutFormat';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -78,13 +79,15 @@ export function ScorePage() {
             id="rut"
             name="rut"
             type="text"
+            inputMode="text"
             placeholder={t.score.rutPlaceholder}
             value={rut}
-            onChange={(e) => setRut(e.target.value)}
+            onChange={(e) => setRut(formatRutInput(e.target.value))}
             readOnly={isUser}
             disabled={loading}
             required
           />
+          {!isUser && <p className="field-hint">{t.score.rutHint}</p>}
         </div>
 
         <button type="submit" className="btn-primary" disabled={loading || !rut.trim()}>
