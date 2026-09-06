@@ -1,104 +1,61 @@
-# Prueba Tecnica - Backend/Cloud Senior Node.js
+# Consulta de Riesgo Financiero — Desafío Técnico
 
-Repositorio base para la prueba tecnica del proceso de postulacion a
-**Ingeniero Backend/Cloud Senior Node.js** (arquitecturas serverless en AWS, entorno fintech).
+MVP para YOL1 / ProntoPaga: API REST (Node.js + TypeScript) con login JWT y
+autorización por roles, más una SPA (React + TypeScript) para consultar el score
+crediticio de un RUT.
 
-> Este scaffold se preparo ANTES de descargar el enunciado real (pendiente de acceso via
-> OTP en el link de DocSend). Defini el stack, la arquitectura y los lineamientos de
-> seguridad/testing en base a lo solicitado en la oferta de trabajo, y use Claude Code
-> como acelerador para la implementacion del andamiaje (config de lint/test/CI, estructura
-> de carpetas, ejemplo de handler). Cada decision fue revisada y es explicable por mi.
-> Ver `docs/BUENAS_PRACTICAS.md` para el checklist a seguir.
-
-## Stack
-
-- **Runtime:** Node.js 20 + TypeScript
-- **IaC / Serverless:** Serverless Framework v3 (Lambda, API Gateway HTTP API, DynamoDB)
-- **Testing:** Jest + ts-jest
-- **Lint/Format:** ESLint + Prettier
-- **CI/CD:** GitHub Actions (lint -> build -> test)
-- **Seguridad:** validacion con Zod, JWT (jsonwebtoken / aws-jwt-verify), roles IAM de minimo privilegio
+Ver `docs/REQUERIMIENTOS_HISTORIAS_USUARIO.md` para el alcance exacto (extraído
+del enunciado) y `ai_interactions.md` para la transparencia de uso de IA pedida.
 
 ## Estructura
 
 ```
-src/
-  handlers/     # Entry points de Lambda (delgados)
-  lib/          # Logica de negocio, casos de uso
-  middleware/   # Auth, validacion, error handling reutilizable
-  types/        # Tipos e interfaces compartidas
-tests/
-  unit/         # Tests unitarios
-  integration/  # Tests de integracion
-docs/
-  BUENAS_PRACTICAS.md
-serverless.yml  # Definicion de infraestructura/funciones
+backend/    API REST (Express + TypeScript)
+frontend/   SPA (React + TypeScript)
+docs/       Requerimientos, historias de usuario, buenas practicas
 ```
 
-## Como correr
+## Backend
 
 ```bash
+cd backend
 npm install
-npm run lint
-npm run build
-npm test
-npm run sls:offline   # levanta API Gateway + Lambda local
+cp .env.example .env
+npm run dev      # http://localhost:4000
+npm test         # 17 tests, ~95% cobertura
 ```
 
-## Panel visual de prueba (client/index.html)
+### Endpoints
 
-Con el server local corriendo (`npm run sls:offline`), abre `client/index.html`
-directamente en el navegador (doble clic, o "Abrir con" tu navegador) para crear,
-listar y ver items de forma visual, sin usar curl/Postman.
+- `POST /login` — body `{ "username": "...", "password": "..." }` → `{ token, role, rut? }`
+- `GET /score/:rut` — header `Authorization: Bearer <token>` → `{ rut, score, fecha }`
 
-1. Genera un token de prueba (el secreto nunca se expone en el navegador):
-   `npm run dev:token -- dev-user-1`
-2. Pega el token en el campo "Bearer token" del panel.
-3. Crea y explora items desde ahi.
+### Usuarios mock
 
-Es una herramienta de desarrollo local, no forma parte de la entrega.
+| username    | password  | role  | rut            |
+|-------------|-----------|-------|----------------|
+| admin       | admin123  | admin | —              |
+| jperez      | user123   | user  | 12.345.678-5   |
+| mgonzalez   | user123   | user  | 9.876.543-1    |
 
-**Nota:** `serverless-offline` emula Lambda + API Gateway, pero no una tabla DynamoDB
-real. `/health` funciona sin problema; crear/listar items falla con
-`Could not load credentials from any providers` hasta que haya una tabla real
-(desplegada en AWS) o DynamoDB Local (plugin `serverless-dynamodb`, requiere Java).
-El panel sirve igual para validar auth, CORS y el formato de las respuestas de error.
+Un `user` solo puede consultar su propio RUT (403 si intenta otro); `admin` puede
+consultar cualquiera.
 
-## Coleccion de Postman (postman/collection.json)
+## Frontend
 
-Alternativa a `client/index.html` para probar la API con Postman/Insomnia (compatibles
-con el formato Postman v2.1). Incluye health check y todos los metodos de items
-(crear, obtener por id, listar con paginacion) mas casos de error (401, 404, 400) y
-un caso que demuestra la idempotencia.
+```bash
+cd frontend
+npm install
+npm run dev       # http://localhost:5173
+```
 
-1. Importa `postman/collection.json` en Postman.
-2. En las variables de la coleccion, define `token` (genera uno con
-   `npm run dev:token -- dev-user-1`). `baseUrl` ya viene con `http://localhost:3000`.
-3. Corre "Crear item" primero — guarda el id creado en la variable `itemId` para que
-   "Obtener item por id" y "Crear item (reintento idempotente)" lo usen automaticamente.
+## Reglas de negocio clave
 
-Aplica la misma limitacion que el panel HTML: crear/listar requieren una tabla
-DynamoDB real detras (ver nota arriba).
-
-## Estrategia de branching
-
-- `main`: version estable/entregable final.
-- `develop`: integracion de features durante el desarrollo de la prueba.
-- `feature/<nombre>`: una rama por funcionalidad/endpoint, PR hacia `develop`.
-
-Commits siguiendo [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `test:`, `docs:`, `chore:`).
-
-## Nota sobre uso de IA
-
-Defini los lineamientos tecnicos (stack, arquitectura, seguridad, testing) en base a los
-requisitos de la oferta, y use Claude Code como acelerador para construir el andamiaje
-inicial. Reviso y comprendo cada linea antes de commitear, en linea con lo solicitado en
-el proceso ("comprension integra del codigo, sin vibe coding"): puedo explicar el porque
-de cada decision (eleccion de Serverless Framework, modelado de DynamoDB, permisos IAM,
-configuracion de lint/test/CI, etc.).
-
-## Pendiente
-
-- [ ] Descargar y leer el enunciado real (link DocSend, requiere OTP por correo).
-- [ ] Ajustar `serverless.yml` y handlers al enunciado especifico.
-- [ ] Actualizar esta seccion con el detalle del desafio una vez conocido.
+- El score es determinista: mismo RUT siempre devuelve el mismo score (0-100),
+  RUTs distintos dan scores distintos (hash del RUT normalizado, ver
+  `backend/src/lib/score.ts`).
+- `POST /login` nunca incluye `rut` en el JWT si el rol es `admin` (tal como pide
+  el enunciado).
+- Los errores nunca exponen detalle interno: 401 (no autenticado), 403 (autenticado
+  pero sin permiso sobre ese RUT), 400 (RUT mal formado), 500 genérico para
+  cualquier otro caso.
