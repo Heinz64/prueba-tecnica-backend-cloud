@@ -11,6 +11,10 @@ Para la documentación formal del proyecto en formato **Spec-Driven
 Development** (principios del proyecto, especificación del feature, plan
 técnico y desglose de tareas), ver [`specify/`](./specify/README.md).
 
+Para el equipo comercial: [Manual de Usuario](./docs/Manual_Usuario_Consulta_Riesgo_Financiero.pdf)
+(cómo iniciar sesión, consultar un score, interpretar el resultado y qué
+hacer ante cada mensaje de error).
+
 ## Estructura
 
 ```
