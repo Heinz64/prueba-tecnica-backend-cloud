@@ -16,22 +16,44 @@ e2e/        Pruebas end-to-end (Playwright) sobre backend + frontend reales
 docs/       Requerimientos, historias de usuario, buenas practicas
 ```
 
-## Backend
+## Requisitos
+
+- Node.js 18 o superior (probado con Node 22) y npm.
+- Dos terminales libres: una para el backend y otra para el frontend (deben
+  correr al mismo tiempo).
+
+## Cómo levantar el proyecto en local
+
+### 1. Backend (API REST) — Terminal 1
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
-npm run dev      # http://localhost:4000
-npm test         # 17 tests, ~95% cobertura
+npm run dev
 ```
 
-### Endpoints
+Queda escuchando en **http://localhost:4000**. Verificar que levantó bien:
 
-- `POST /login` — body `{ "username": "...", "password": "..." }` → `{ token, role, rut? }`
-- `GET /score/:rut` — header `Authorization: Bearer <token>` → `{ rut, score, fecha }`
+```bash
+curl http://localhost:4000/health
+# {"status":"ok","timestamp":"..."}
+```
 
-### Usuarios mock
+### 2. Frontend (SPA React) — Terminal 2
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Queda escuchando en **http://localhost:5173**. Abrir esa URL en el navegador.
+
+### 3. Probar la app
+
+En el login, usar cualquiera de estos usuarios mock (no hay base de datos, las
+credenciales están hardcodeadas a propósito, ver `docs/REQUERIMIENTOS_HISTORIAS_USUARIO.md`):
 
 | username    | password  | role  | rut            |
 |-------------|-----------|-------|----------------|
@@ -39,16 +61,37 @@ npm test         # 17 tests, ~95% cobertura
 | jperez      | user123   | user  | 12.345.678-5   |
 | mgonzalez   | user123   | user  | 9.876.543-1    |
 
-Un `user` solo puede consultar su propio RUT (403 si intenta otro); `admin` puede
-consultar cualquiera.
+- Con `jperez` o `mgonzalez` (role `user`): el campo RUT queda fijo con el RUT
+  propio y solo se puede consultar ese.
+- Con `admin`: el campo RUT es editable y se puede consultar cualquier RUT
+  (por ejemplo, probar con el RUT de otro usuario).
+- Con credenciales incorrectas: se muestra un mensaje de error claro.
 
-## Frontend
+### 4. Correr los tests (opcional pero recomendado)
+
+Backend (unitarios + integración, Jest):
 
 ```bash
-cd frontend
-npm install
-npm run dev       # http://localhost:5173
+cd backend
+npm test        # 17 tests, ~95% cobertura
 ```
+
+E2E (Playwright, contra la app real corriendo):
+
+```bash
+cd e2e
+npm install
+npm run install:browsers   # descarga el navegador de Playwright (una vez)
+npm test                   # levanta backend + frontend y corre la suite
+```
+
+## Endpoints
+
+- `POST /login` — body `{ "username": "...", "password": "..." }` → `{ token, role, rut? }`
+- `GET /score/:rut` — header `Authorization: Bearer <token>` → `{ rut, score, fecha }`
+
+Un `user` solo puede consultar su propio RUT (403 si intenta otro); `admin` puede
+consultar cualquiera.
 
 ## Reglas de negocio clave
 
@@ -61,22 +104,16 @@ npm run dev       # http://localhost:5173
   pero sin permiso sobre ese RUT), 400 (RUT mal formado), 500 genérico para
   cualquier otro caso.
 
-## Pruebas E2E (Playwright)
+## Pruebas E2E (Playwright) — detalle
 
 Cubren los flujos completos a traves de la UI real, contra el backend real
 (no mocks): login invalido, login de `user` con RUT bloqueado, consulta de
 score propia, consulta de `admin` a un RUT ajeno, y logout.
 
-```bash
-cd e2e
-npm install
-npm run install:browsers   # descarga el navegador de Playwright (una vez)
-npm test                   # levanta backend + frontend y corre la suite
-```
-
-`npm test` copia automaticamente los `.env.example` de `backend` y `frontend`
-si no existen (`scripts/ensure-env.js`), y Playwright levanta ambos servidores
-(`webServer` en `playwright.config.ts`) antes de correr los tests.
+`npm test` (dentro de `e2e/`) copia automaticamente los `.env.example` de
+`backend` y `frontend` si no existen (`scripts/ensure-env.js`), y Playwright
+levanta ambos servidores (`webServer` en `playwright.config.ts`) antes de
+correr los tests — no hace falta tener el backend/frontend corriendo a mano.
 
 > Nota: estas pruebas se escribieron y quedaron listas para correr, pero no se
 > pudieron ejecutar en el entorno donde se desarrollo este MVP porque bloqueaba
