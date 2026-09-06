@@ -24,7 +24,7 @@ export const MOCK_USERS: MockUser[] = [
     username: 'mgonzalez',
     password: 'user123',
     role: 'user',
-    rut: '9.876.543-1',
+    rut: '9.876.543-3',
   },
 ];
 

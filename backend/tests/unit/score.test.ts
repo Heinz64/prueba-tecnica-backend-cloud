@@ -14,7 +14,7 @@ describe('computeScore', () => {
   it('da scores distintos para RUTs distintos', () => {
     const scores = new Set([
       computeScore('12.345.678-5'),
-      computeScore('9.876.543-1'),
+      computeScore('9.876.543-3'),
       computeScore('1.111.111-1'),
       computeScore('22.222.222-2'),
     ]);

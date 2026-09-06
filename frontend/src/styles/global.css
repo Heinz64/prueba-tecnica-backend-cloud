@@ -295,3 +295,100 @@ body {
   font-size: 0.78rem;
   padding: 18px;
 }
+
+/* Loading: spinner inline en botones */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  animation: spin 0.6s linear infinite;
+}
+
+.btn-primary .spinner {
+  border-color: rgba(4, 20, 14, 0.35);
+  border-top-color: var(--accent-ink);
+}
+
+/* Loading: skeleton del resultado, mismo alto aproximado que .result-card
+   para que la tarjeta no "salte" (se deforme) al pasar de cargando -> resultado */
+@keyframes pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.9; }
+}
+
+.skeleton {
+  margin-top: 22px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.skeleton-line {
+  border-radius: 6px;
+  background: var(--surface-border);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.skeleton-line.short { height: 12px; width: 35%; margin-bottom: 16px; }
+.skeleton-line.tall { height: 38px; width: 55%; margin-bottom: 14px; }
+.skeleton-line.bar { height: 8px; width: 100%; }
+
+/* Selector de idioma */
+.lang-toggle {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  color: var(--ink-soft);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  font-family: var(--mono);
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.lang-toggle:hover { background: var(--surface); color: var(--ink); }
+
+/* Responsive: evita que el topbar y las tarjetas se deformen en pantallas chicas */
+@media (max-width: 560px) {
+  .topbar {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .session-pill {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .center-stage {
+    padding: 20px 14px;
+  }
+
+  .card,
+  .card.wide {
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+
+  .score-value {
+    font-size: 2.1rem;
+  }
+
+  .result-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

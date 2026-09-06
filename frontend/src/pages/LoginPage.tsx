@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { login, ApiError } from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export function LoginPage() {
   const { setSession } = useAuth();
+  const { t } = useLanguage();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -19,12 +21,10 @@ export function LoginPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         setError(
-          err.statusCode === 401
-            ? 'Usuario o contrasena incorrectos.'
-            : err.message || 'No se pudo iniciar sesion.',
+          err.statusCode === 401 ? t.login.errors.invalidCredentials : err.message || t.login.errors.generic,
         );
       } else {
-        setError('No se pudo conectar con el servidor.');
+        setError(t.login.errors.network);
       }
     } finally {
       setLoading(false);
@@ -33,16 +33,16 @@ export function LoginPage() {
 
   return (
     <div className="card">
-      <h1>Iniciar sesion</h1>
+      <h1>{t.login.title}</h1>
       <p className="footer-note" style={{ margin: '0 0 20px' }}>
-        Ingresa con tus credenciales para consultar el score de riesgo.
+        {t.login.subtitle}
       </p>
 
       {error && <div className="alert error">{error}</div>}
 
       <form onSubmit={handleSubmit} noValidate>
         <div className="field">
-          <label htmlFor="username">Usuario</label>
+          <label htmlFor="username">{t.login.usernameLabel}</label>
           <input
             id="username"
             name="username"
@@ -50,12 +50,13 @@ export function LoginPage() {
             autoComplete="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            disabled={loading}
             required
           />
         </div>
 
         <div className="field">
-          <label htmlFor="password">Contrasena</label>
+          <label htmlFor="password">{t.login.passwordLabel}</label>
           <input
             id="password"
             name="password"
@@ -63,12 +64,14 @@ export function LoginPage() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
             required
           />
         </div>
 
         <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? 'Ingresando...' : 'Ingresar'}
+          {loading && <span className="spinner" aria-hidden="true" />}
+          {loading ? t.login.submitting : t.login.submit}
         </button>
       </form>
     </div>
