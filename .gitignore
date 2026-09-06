@@ -9,3 +9,6 @@ coverage/
 .DS_Store
 .vscode/
 .idea/
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
