@@ -122,3 +122,29 @@ correr los tests — no hace falta tener el backend/frontend corriendo a mano.
 > (`Usuario`, `Contrasena`, `RUT`, `Ingresar`, `Consultar`, `Cerrar sesion`),
 > y el flujo fue validado manualmente end-to-end (login admin/user, RUT propio,
 > RUT ajeno con 403, sin token con 401) antes de escribir los tests.
+
+## Consideraciones de seguridad para producción
+
+Este MVP corre en HTTP plano en local, lo cual es aceptable solo para
+desarrollo/evaluación. Antes de un despliegue real habría que agregar:
+
+- **HTTPS/TLS obligatorio.** Hoy el login viaja con el password en texto
+  plano dentro del body JSON. En `localhost` eso nunca sale de la máquina,
+  pero en producción sobre HTTP plano cualquiera con acceso a la red (wifi
+  pública, proxy, router comprometido) podría leerlo (*sniffing*) o incluso
+  alterar la petición/respuesta sin ser detectado (*tampering*). La solución
+  correcta es cifrar el canal completo con TLS — normalmente terminado en el
+  reverse proxy / load balancer / plataforma de hosting, no reescribiendo el
+  endpoint de login. Cifrar el password en el frontend antes de enviarlo
+  (hash en el cliente) **no reemplaza a TLS**: sin canal cifrado, ese hash
+  viaja igual de expuesto y se convierte en el nuevo secreto reutilizable
+  (*pass-the-hash*).
+- **HSTS** (`Strict-Transport-Security`) para forzar siempre HTTPS y evitar
+  downgrade a HTTP.
+- **Rate limiting** en `/login` para mitigar fuerza bruta sobre credenciales.
+- **Hash de passwords en reposo** (bcrypt/argon2) si en el futuro se agrega
+  persistencia real de usuarios — hoy no aplica porque el enunciado pide
+  credenciales mock sin base de datos.
+- **CORS_ORIGIN** restringido al dominio real del frontend en producción (ya
+  es configurable por variable de entorno, ver `backend/.env.example`).
+
