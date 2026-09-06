@@ -12,6 +12,7 @@ del enunciado) y `ai_interactions.md` para la transparencia de uso de IA pedida.
 ```
 backend/    API REST (Express + TypeScript)
 frontend/   SPA (React + TypeScript)
+e2e/        Pruebas end-to-end (Playwright) sobre backend + frontend reales
 docs/       Requerimientos, historias de usuario, buenas practicas
 ```
 
@@ -59,3 +60,28 @@ npm run dev       # http://localhost:5173
 - Los errores nunca exponen detalle interno: 401 (no autenticado), 403 (autenticado
   pero sin permiso sobre ese RUT), 400 (RUT mal formado), 500 genérico para
   cualquier otro caso.
+
+## Pruebas E2E (Playwright)
+
+Cubren los flujos completos a traves de la UI real, contra el backend real
+(no mocks): login invalido, login de `user` con RUT bloqueado, consulta de
+score propia, consulta de `admin` a un RUT ajeno, y logout.
+
+```bash
+cd e2e
+npm install
+npm run install:browsers   # descarga el navegador de Playwright (una vez)
+npm test                   # levanta backend + frontend y corre la suite
+```
+
+`npm test` copia automaticamente los `.env.example` de `backend` y `frontend`
+si no existen (`scripts/ensure-env.js`), y Playwright levanta ambos servidores
+(`webServer` en `playwright.config.ts`) antes de correr los tests.
+
+> Nota: estas pruebas se escribieron y quedaron listas para correr, pero no se
+> pudieron ejecutar en el entorno donde se desarrollo este MVP porque bloqueaba
+> la descarga del navegador de Playwright (sin acceso a `cdn.playwright.dev`).
+> Los selectores usan las mismas etiquetas y textos reales de los componentes
+> (`Usuario`, `Contrasena`, `RUT`, `Ingresar`, `Consultar`, `Cerrar sesion`),
+> y el flujo fue validado manualmente end-to-end (login admin/user, RUT propio,
+> RUT ajeno con 403, sin token con 401) antes de escribir los tests.
