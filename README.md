@@ -59,7 +59,7 @@ credenciales están hardcodeadas a propósito, ver `docs/REQUERIMIENTOS_HISTORIA
 |-------------|-----------|-------|----------------|
 | admin       | admin123  | admin | —              |
 | jperez      | user123   | user  | 12.345.678-5   |
-| mgonzalez   | user123   | user  | 9.876.543-1    |
+| mgonzalez   | user123   | user  | 9.876.543-3    |
 
 - Con `jperez` o `mgonzalez` (role `user`): el campo RUT queda fijo con el RUT
   propio y solo se puede consultar ese.

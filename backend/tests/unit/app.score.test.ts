@@ -36,7 +36,7 @@ describe('GET /score/:rut', () => {
 
   it('user NO puede consultar el RUT de otra persona -> 403', async () => {
     const token = await loginAs('jperez', 'user123');
-    const res = await request(app).get('/score/9.876.543-1').set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/score/9.876.543-3').set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(403);
     expect(res.body.error).toBe('FORBIDDEN');
   });
@@ -44,7 +44,7 @@ describe('GET /score/:rut', () => {
   it('admin puede consultar cualquier RUT -> 200', async () => {
     const token = await loginAs('admin', 'admin123');
     const res1 = await request(app).get('/score/12.345.678-5').set('Authorization', `Bearer ${token}`);
-    const res2 = await request(app).get('/score/9.876.543-1').set('Authorization', `Bearer ${token}`);
+    const res2 = await request(app).get('/score/9.876.543-3').set('Authorization', `Bearer ${token}`);
     expect(res1.status).toBe(200);
     expect(res2.status).toBe(200);
   });
@@ -53,5 +53,13 @@ describe('GET /score/:rut', () => {
     const token = await loginAs('admin', 'admin123');
     const res = await request(app).get('/score/no-es-un-rut').set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(400);
+  });
+
+  it('400 si el RUT tiene la forma correcta pero el digito verificador no calza', async () => {
+    const token = await loginAs('admin', 'admin123');
+    // 12.345.678-9 tiene la forma de un RUT (8 digitos + DV) pero el DV real es 5, no 9.
+    const res = await request(app).get('/score/12.345.678-9').set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('VALIDATION_ERROR');
   });
 });

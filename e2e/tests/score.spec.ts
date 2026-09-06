@@ -19,10 +19,10 @@ test.describe('Consulta de score', () => {
 
   test('un admin puede consultar el score de un RUT que no es el suyo', async ({ page }) => {
     await login(page, 'admin', 'admin123');
-    await page.getByLabel('RUT').fill('9.876.543-1');
+    await page.getByLabel('RUT').fill('9.876.543-3');
     await page.getByRole('button', { name: /consultar/i }).click();
 
-    await expect(page.getByText('9.876.543-1')).toBeVisible();
+    await expect(page.getByText('9.876.543-3')).toBeVisible();
     await expect(page.locator('.score-value')).toBeVisible();
   });
 
