@@ -32,4 +32,15 @@ test.describe('Consulta de score', () => {
 
     await expect(page.getByRole('heading', { name: /iniciar sesión/i })).toBeVisible();
   });
+
+  test('el RUT se auto-formatea mientras el admin escribe (con o sin puntos)', async ({ page }) => {
+    await login(page, 'admin', 'admin123');
+    const rutInput = page.getByLabel('RUT');
+
+    await rutInput.fill('9876543');
+    await expect(rutInput).toHaveValue('987.654-3');
+
+    await rutInput.fill('12.345.678-5');
+    await expect(rutInput).toHaveValue('12.345.678-5');
+  });
 });

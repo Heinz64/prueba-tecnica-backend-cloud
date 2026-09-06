@@ -24,6 +24,7 @@ export interface Translations {
     subtitleAdmin: string;
     rutLabel: string;
     rutPlaceholder: string;
+    rutHint: string;
     submit: string;
     submitting: string;
     resultRutLabel: string;
@@ -65,6 +66,7 @@ const es: Translations = {
     subtitleAdmin: 'Como administrador puedes consultar el score de cualquier RUT.',
     rutLabel: 'RUT',
     rutPlaceholder: '12.345.678-5',
+    rutHint: 'Puedes escribirlo con o sin puntos y guion: se formatea automáticamente.',
     submit: 'Consultar',
     submitting: 'Consultando…',
     resultRutLabel: 'RUT consultado',
@@ -106,6 +108,7 @@ const en: Translations = {
     subtitleAdmin: 'As an admin you can check the score of any RUT.',
     rutLabel: 'RUT',
     rutPlaceholder: '12.345.678-5',
+    rutHint: 'You can type it with or without dots and dash: it auto-formats.',
     submit: 'Look up',
     submitting: 'Looking up…',
     resultRutLabel: 'RUT queried',
